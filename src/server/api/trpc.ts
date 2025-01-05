@@ -6,6 +6,7 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
+import { auth } from "@clerk/nextjs/server";
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -15,20 +16,17 @@ import { db } from "~/server/db";
 /**
  * 1. CONTEXT
  *
- * This section defines the "contexts" that are available in the backend API.
  *
- * These allow you to access things when processing a request, like the database, the session, etc.
- *
- * This helper generates the "internals" for a tRPC context. The API handler and RSC clients each
- * wrap this and provides the required context.
- *
- * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  return {
-    db,
-    ...opts,
-  };
+    // get auth user information, if not logged in, return null
+    const user = await auth();
+
+    return {
+        auth: user,
+        db,
+        ...opts,
+    };
 };
 
 /**
@@ -74,10 +72,7 @@ export const createCallerFactory = t.createCallerFactory;
 export const createTRPCRouter = t.router;
 
 /**
- * Middleware for timing procedure execution and adding an artificial delay in development.
- *
- * You can remove this if you don't like it, but it can help catch unwanted waterfalls by simulating
- * network latency that would occur in production but not in local development.
+ * Define middleware here
  */
 const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now();
@@ -96,11 +91,24 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result;
 });
 
+// create auth protect middleware
+const isAuthed = t.middleware(({ next, ctx }) => {
+    // check auth status
+    if (!ctx.auth?.userId) { 
+        throw new Error("User not authenticated!");
+    }
+
+    return next({
+        ctx: {
+            ...ctx,
+            // cuz user is exist, any unsured property should be certain, so use assertion
+            auth: ctx.auth as Required<typeof ctx.auth>
+        }
+    });
+});
+
 /**
- * Public (unauthenticated) procedure
- *
- * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
- * guarantee that a user querying is authorized, but you can still access user session data if they
- * are logged in.
+ * Wrap middleware into endpoints.
  */
 export const publicProcedure = t.procedure.use(timingMiddleware);
+export const privateProcedure = t.procedure.use(isAuthed);
