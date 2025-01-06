@@ -23,6 +23,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.8.2",
     "@prisma/client": "^5.14.0",
+    "@radix-ui/react-select": "^2.1.4",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.2",
@@ -43,10 +44,13 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-resizable-panels": "^2.1.7",
+    "select": "^1.1.2",
     "server-only": "^0.0.1",
+    "shadcn": "^2.1.8",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "usehooks-ts": "^3.1.0",
     "zod": "^3.23.3"
   },
   "devDependencies": {
