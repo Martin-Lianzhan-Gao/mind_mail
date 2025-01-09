@@ -5,6 +5,7 @@ import { useLocalStorage } from "usehooks-ts";
 import { Select, SelectContent, SelectTrigger, SelectValue, SelectItem } from "~/components/ui/select";
 import { cn } from "~/lib/utils";
 import { Plus } from "lucide-react";
+import { getAurinkoAuthURL } from "~/lib/aurinko";
 
 
 type Props = {
@@ -17,6 +18,7 @@ const AccountSwitcher = ({ isCollapsed }: Props) => {
     const [accountId, setAccountId] = useLocalStorage('accountId', '');
 
     const { data } = api.account.getAccounts.useQuery();
+    
     // check data existence
     if (!data) return null;
     
@@ -57,7 +59,12 @@ const AccountSwitcher = ({ isCollapsed }: Props) => {
                 })}
                 <div className="flex relative hover:bg-gray-50 w-full cursor-pointer items-center rounded-sm py-1.5 pl-2 pr-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
                     onClick={async () => { 
-                        
+                        try {
+                            const url = await getAurinkoAuthURL('Google');
+                            window.location.href = url;
+                        } catch (error) {
+                            console.error(error);
+                        }
                     }}
                 >
                     <Plus className="size-4 mr-1"></Plus>
@@ -66,7 +73,6 @@ const AccountSwitcher = ({ isCollapsed }: Props) => {
             </SelectContent>
         </Select>
     )
-
 }
 
 export default AccountSwitcher;

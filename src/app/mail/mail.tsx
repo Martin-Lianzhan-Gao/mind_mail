@@ -7,6 +7,7 @@ import { Tabs, TabsList } from "~/components/ui/tabs";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 import AccountSwitcher from "./components/account-switcher";
+import Sidebar from "./components/sidebar";
 
 // define props structure
 type Props = {
@@ -52,7 +53,7 @@ const Mail = ({ defaultLayout = [20, 32, 48], navCollapseSize, defaultCollapsed 
                         </div>
                         <Separator />
                         {/* Email Category Side Bar */}
-                        Email Categories Side Bar
+                        <Sidebar isCollapsed={isCollapsed} />
                         <div className="flex-1"></div>
                         {/* Main Content */}
                         ASK AI
