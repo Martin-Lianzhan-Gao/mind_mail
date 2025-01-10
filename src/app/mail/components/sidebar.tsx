@@ -3,6 +3,7 @@ import React from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Nav } from "./nav";
 import { File, Inbox, Send } from "lucide-react";
+import { api } from "~/trpc/react";
 
 type Props = {
 
@@ -17,6 +18,23 @@ const Sidebar = ({ isCollapsed }: Props) => {
     // get value from local storage
     const [tab] = useLocalStorage<"inbox" | "sent" | "draft">("tab-category", "inbox");
 
+    // get number of threads by category
+    const { data : inboxNum } = api.account.getNumThreads.useQuery({
+        accountId,
+        tabCategory: "inbox"
+    })
+
+    const { data: draftNum } = api.account.getNumThreads.useQuery({
+        accountId,
+        tabCategory: "draft"
+    })
+
+    const { data: sentNum } = api.account.getNumThreads.useQuery({
+        accountId,
+        tabCategory: "draft"
+    })
+
+
     return (
         <div suppressHydrationWarning={ true }>
             <Nav
@@ -24,19 +42,19 @@ const Sidebar = ({ isCollapsed }: Props) => {
                 links={[
                     {
                         title: "Inbox",
-                        label: '6',
+                        label: inboxNum?.toString() ?? '0',
                         icon: Inbox,
                         variant: tab === "inbox" ? "default" : "ghost"
                     },
                     {
                         title: "Draft",
-                        label: '9',
+                        label: draftNum?.toString() ?? '0',
                         icon: File,
                         variant: tab === "draft" ? "default" : "ghost"
                     },
                     {
                         title: "Sent",
-                        label: '12',
+                        label: sentNum?.toString() ?? '0',
                         icon: Send,
                         variant: tab === "sent" ? "default" : "ghost"
                     }
