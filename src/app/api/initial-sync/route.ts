@@ -57,7 +57,7 @@ export const POST = async (req: NextRequest) => {
     console.log("Latest Token has been stored to account, email upsert process start...");
 
     // upsert emails into database
-    await syncEmailsToDatabase(emails, accountId);
+    await syncEmailsToDatabase(emails, accountId as string);
 
     console.log("Emails Sync Successfully, with latest delta token:", latestDeltaToken); 
 

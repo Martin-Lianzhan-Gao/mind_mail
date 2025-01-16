@@ -1,5 +1,4 @@
 import axios from "axios";
-import { headers } from "next/headers";
 import { SyncResponse, SyncUpdatedEmailsReponse, EmailMessage } from "~/type";
 
 export class Accout {
@@ -37,7 +36,7 @@ export class Accout {
      */
     async getUpdatedEmails({ deltaToken, pageToken }: { deltaToken?: string, pageToken?: string }) {
         // receive deltaToken and pageToken by a project
-        let params: Record<string, string> = {};
+        const params: Record<string, string> = {};
 
         // store value into params if exists
         if (deltaToken) {
@@ -72,7 +71,7 @@ export class Accout {
             let deltaToken = syncResponse.syncUpdatedToken;
 
             // get updated emails content (maybe more than one page)
-            let updatedResponse = await this.getUpdatedEmails({ deltaToken });
+            const updatedResponse = await this.getUpdatedEmails({ deltaToken });
             // get nextDeltaToken, always track the latest one
             if (updatedResponse.nextPageToken) {
                 deltaToken = updatedResponse.nextDeltaToken;
@@ -82,7 +81,7 @@ export class Accout {
 
             // while there is a next page
             while (updatedResponse.nextPageToken) { 
-                let updatedReponse = await this.getUpdatedEmails({ pageToken: updatedResponse.nextPageToken });
+                const updatedReponse = await this.getUpdatedEmails({ pageToken: updatedResponse.nextPageToken });
                 // always keep the latest delta token
                 if (updatedReponse.nextPageToken) { 
                     deltaToken = updatedReponse.nextDeltaToken;

@@ -47,7 +47,7 @@ const upsertEmail = async (email: EmailMessage, accountId: string, index: number
 
         for (const address of emailAddressForUpsert.values()) {
             // sync identical email address to database
-            const upsertedEmailAddress = await upsertEmailAddress(address, accountId);
+            const upsertedEmailAddress = await upsertEmailAddress(address as EmailAddress, accountId);
             // record upserted email address
             upsertedEmailAddresses.push(upsertedEmailAddress);
         };

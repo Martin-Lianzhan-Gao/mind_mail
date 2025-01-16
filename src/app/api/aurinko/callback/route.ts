@@ -40,7 +40,7 @@ export const GET = async (req: NextRequest) => {
         })
     };
     // exchange code for token
-    const token = await exchangeCodeForAccessToken(code as string);
+    const token = await exchangeCodeForAccessToken(code);
     // check whether token exists
     if (!token) {
         return NextResponse.json({
