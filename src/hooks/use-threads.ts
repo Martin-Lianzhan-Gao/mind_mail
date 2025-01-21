@@ -1,7 +1,10 @@
 // a custom hook to read threads from db based on states stored in local storage
-import React from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { api } from "~/trpc/react";
+import { atom, useAtom } from "jotai";
+
+// create / register a state atom
+export const threadIdAtom = atom<string | null>(null);
  
 const useThreads = () => { 
     const { data: accounts } = api.account.getAccounts.useQuery();
@@ -9,17 +12,34 @@ const useThreads = () => {
     const [tabCategory] = useLocalStorage<"inbox" | "sent" | "draft">("tab-category", "inbox");
     const [done] = useLocalStorage("thread-done", false);
 
-    const { data: threads } = api.account.getThreads.useQuery({
+    // subscribe threadIdAtom
+    const [threadId, setThreadId] = useAtom(threadIdAtom);
+
+    const { data: threads, isFetching, refetch } = api.account.getThreads.useQuery({
         accountId,
         tabCategory,
         done
     }, {
-        // set placeholder data if accountId and tabCategory is not null
-        enabled: !!accountId && !!tabCategory, placeholderData: e => e
+        // if accountId and tabCategory is not null, execute query
+        enabled: !!accountId && !!tabCategory,
+        // set placeholder data displaying while query is loading in UI
+        placeholderData: previousData => previousData,
+        // set auto-refetch interval
+        refetchInterval: 5000
     })
 
-    return threads
-
+    return {
+        threads,
+        // fetching status
+        isFetching,
+        // transfer refetch function
+        refetch,
+        // find relevant account based on account id
+        account: accounts?.find(account => account.id === accountId),
+        // pass thread id state and setter
+        threadId,
+        setThreadId
+    }
 }
 
 export default useThreads

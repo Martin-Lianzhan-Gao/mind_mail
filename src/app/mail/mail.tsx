@@ -8,6 +8,7 @@ import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 import AccountSwitcher from "./components/account-switcher";
 import Sidebar from "./components/sidebar";
+import ThreadList from "./components/thread-list";
 
 // define props structure
 type Props = {
@@ -80,10 +81,10 @@ const Mail = ({ defaultLayout = [20, 32, 48], navCollapseSize, defaultCollapsed 
                         {/* Search Bar */}
                         Search Bar
                         <TabsContent value="Inbox">
-                            Inbox Emails
+                            <ThreadList></ThreadList>
                         </TabsContent>
                         <TabsContent value="Done">
-                            Done Emails
+                            <ThreadList></ThreadList>
                         </TabsContent>
                     </Tabs>
                 </ResizablePanel>
