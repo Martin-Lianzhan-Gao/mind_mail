@@ -9,6 +9,7 @@ import { cn } from "~/lib/utils";
 import AccountSwitcher from "./components/account-switcher";
 import Sidebar from "./components/sidebar";
 import ThreadList from "./components/thread-list";
+import ThreadDisplay from "./components/thread-display";
 
 // define props structure
 type Props = {
@@ -90,8 +91,8 @@ const Mail = ({ defaultLayout = [20, 32, 48], navCollapseSize, defaultCollapsed 
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel defaultSize={defaultLayout[2]} minSize={30}>
-                    {/* Threads Display */}
-                    Threads View
+                    {/* Thread Display */}
+                    <ThreadDisplay></ThreadDisplay>
                 </ResizablePanel>
              </ResizablePanelGroup>
         </TooltipProvider>
