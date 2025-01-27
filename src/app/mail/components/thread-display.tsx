@@ -21,7 +21,7 @@ const ThreadDisplay = () => {
     const thread = threads?.find(thr => thr.id === threadId);
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full max-h-[calc(100vh-50px)]">
             { /* Button Row */ }
             <div className="flex items-center p-2">
                 <div className="flex items-center gap-2">
@@ -60,7 +60,7 @@ const ThreadDisplay = () => {
             <Separator></Separator>
             {thread ? <> 
                 {/* Display subject content of a selected thread */}
-                <div className="flex flex-col flex-1 overflow-scroll ">
+                <div className="flex flex-col flex-1 overflow-auto">
                     <div className="flex items-center p-4">
                         <div className="flex items-center gap-4 text-sm">
                             <Avatar>
@@ -93,7 +93,7 @@ const ThreadDisplay = () => {
                     </div>
                     <Separator></Separator>
                     { /* Email Content */ }
-                    <div className="max-h-[calc(100vh - 500px)] overflow-scroll flex flex-col">
+                    <div className="max-h-[calc(100vh - 500px)] overflow-auto flex flex-col">
                         <div className="p-6 flex flex-col gap-4">
                             {thread.emails.map(email => { 
                                 return(<EmailDisplay key={email.id} email={email} />)

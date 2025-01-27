@@ -49,7 +49,7 @@ const Mail = ({ defaultLayout = [20, 32, 48], navCollapseSize, defaultCollapsed 
                     {/* Side Bar Sub Elements */ }
                     <div className="flex flex-col h-full flex-1">
                         {/* Account Switcher Area */}
-                        <div className={cn("flex h-[52px] items-center justify-between", isCollapsed ? 'h-[52px]' : 'px-2')}>
+                        <div className={cn("flex h-[52px] items-center justify-center", isCollapsed ? 'h-[52px]' : 'px-2')}>
                             {/* Account Switcher */}
                             <AccountSwitcher isCollapsed={isCollapsed}></AccountSwitcher>
                         </div>
