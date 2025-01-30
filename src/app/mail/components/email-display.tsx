@@ -37,10 +37,9 @@ const EmailDisplay = ({ email }: Props) => {
                 </p>
             </div>
             <div className="h-4"></div>
-            <Letter html={email?.body ?? ""} className='bg-white rounded-md text-black overflow-hidden' />
+            <Letter html={email?.body ?? ""} className='bg-white rounded-md' />
         </div>
     )
-    
 }
 
 export default EmailDisplay

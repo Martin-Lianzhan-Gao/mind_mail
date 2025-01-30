@@ -14,7 +14,7 @@ export const POST = async (req: NextRequest) => {
     await db.user.upsert({
         where: { id },
         update: { emailAddress, firstName, lastName, imageUrl },
-        create: { id, emailAddress, firstName, lastName, imageUrl },
+        create: { id, emailAddress, firstName, lastName, imageUrl }
     });
 
     console.log("User created successfully!");
