@@ -8,6 +8,8 @@ import { fileURLToPath } from "url";
 // based on user id and account id, find matched account (whether the user has the account or not)
 export const authoriseAccountAccess = async (accountId: string, userId: string) => { 
 
+    console.log("Account id is:" + accountId, "User id is:" + userId)
+
     const account = await db.account.findFirst({
         where: {
             id: accountId,
