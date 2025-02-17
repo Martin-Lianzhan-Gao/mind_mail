@@ -38,7 +38,8 @@ const useThreads = () => {
         account: accounts?.find(account => account.id === accountId),
         // pass thread id state and setter
         threadId,
-        setThreadId
+        setThreadId,
+        accountId
     }
 }
 

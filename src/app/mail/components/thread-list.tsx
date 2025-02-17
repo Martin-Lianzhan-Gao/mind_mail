@@ -5,9 +5,6 @@ import { format, formatDistanceToNow } from "date-fns";
 import { cn } from "~/lib/utils";
 import DOMPurify from "dompurify"
 import { Badge } from "~/components/ui/badge";
-import { atom } from "jotai";
-
-
 
 const ThreadList = () => { 
 

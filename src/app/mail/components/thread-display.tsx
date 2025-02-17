@@ -12,6 +12,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { format } from "date-fns";
 import EmailDisplay from "./email-display";
+import ReplyBox from "./reply-box/reply-box";
 
 
 const ThreadDisplay = () => { 
@@ -21,7 +22,7 @@ const ThreadDisplay = () => {
     const thread = threads?.find(thr => thr.id === threadId);
 
     return (
-        <div className="flex flex-col h-full max-h-[calc(100vh-50px)]">
+        <div className="flex flex-col h-full max-h-[calc(100vh-8px)]">
             { /* Button Row */ }
             <div className="flex items-center p-2">
                 <div className="flex items-center gap-2">
@@ -103,7 +104,7 @@ const ThreadDisplay = () => {
                     <div className="flex-1"></div>
                     <Separator className="mt-auto"></Separator>
                     { /* Reply Box */}
-                    Reply box
+                    <ReplyBox />
                 </div>
             </> : <> 
                 <div className="p-8  text-center text-muted-foreground">

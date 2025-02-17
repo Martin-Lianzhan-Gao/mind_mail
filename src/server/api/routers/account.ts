@@ -1,9 +1,7 @@
-import { get } from "http";
 import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
-import z from "zod";
+import z, { late } from "zod";
 import { db } from "~/server/db";
 import { Prisma } from "@prisma/client";
-import { fileURLToPath } from "url";
 
 // based on user id and account id, find matched account (whether the user has the account or not)
 export const authoriseAccountAccess = async (accountId: string, userId: string) => { 
@@ -120,5 +118,69 @@ export const accountRouter = createTRPCRouter({
                 lastMessageDate: "desc"
             }
         }) 
-    }) 
+    }),
+    getEmailAddressSuggesstions: privateProcedure.input(z.object({ accountId: z.string() }))
+        .query(async ({ ctx, input }) => {
+            const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId);
+
+            return await ctx.db.emailAddress.findMany({
+                where: {
+                    accountId: account.id
+                },
+                select: {
+                    name: true,
+                    address: true
+                }
+            })
+        }
+    ),
+    getReplyDetails: privateProcedure.input(z.object({
+        accountId: z.string(),
+        threadId: z.string()
+    })).query(async ({ ctx, input }) => {
+        const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId);
+
+        const thread = await ctx.db.thread.findFirst({
+            where: {
+                id: input.threadId
+            },
+            include: {
+                emails: {
+                    // emails in asceding order (from past to present)
+                    orderBy: { sentAt: 'asc' },
+                    select: {
+                        from: true,
+                        cc: true,
+                        bcc: true,
+                        to: true,
+                        sentAt: true,
+                        subject: true,
+                        internetMessageId: true // for Aurinko Email Send API
+                    }
+                }
+            }
+        })
+        // check thread existence
+        if (!thread || thread.emails.length == 0) { 
+            throw new Error('Thread not found!')
+        }
+        
+        // defind the last email of the thread that the account has received (not send by the account)
+        const lastExternalEmail = thread.emails.reverse().find(email => email.from.address !== account.emailAddress);
+
+        if (!lastExternalEmail) { 
+            throw new Error('No external email found!')
+        }
+
+        // return data
+        return {
+            subject: lastExternalEmail.subject,
+            // send source email address and target emails that are not the account email address
+            to: [lastExternalEmail.from, ...lastExternalEmail.to.filter(email => email.address !== account.emailAddress)],
+            // carbon copy
+            cc: lastExternalEmail.cc.filter(email => email.address !== account.emailAddress), 
+            from: { name: account.name, address: account.emailAddress },
+            internetMessageId: lastExternalEmail.internetMessageId
+        }
+     })
 });
