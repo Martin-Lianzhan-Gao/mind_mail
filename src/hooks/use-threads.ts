@@ -29,6 +29,7 @@ const useThreads = () => {
     })
 
     return {
+        // threads of current account
         threads,
         // fetching status
         isFetching,
@@ -36,7 +37,7 @@ const useThreads = () => {
         refetch,
         // find relevant account based on account id
         account: accounts?.find(account => account.id === accountId),
-        // pass thread id state and setter
+        // pass the current thread id state and setter
         threadId,
         setThreadId,
         accountId

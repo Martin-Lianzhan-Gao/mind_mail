@@ -75,6 +75,8 @@ const Component = ({ replyDetails }: { replyDetails: RouterOutputs["account"]["g
             // for send email button
             isSending={false}
             handleSend={handleSend}
+
+            defaultToolBarExpanded={ false }
         />
     )
 }
