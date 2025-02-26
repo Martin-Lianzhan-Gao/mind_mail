@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Text from "@tiptap/extension-text"
@@ -9,6 +9,8 @@ import { Button } from "~/components/ui/button";
 import TagInput from "./tag-input";
 import { Input } from "~/components/ui/input";
 import AIComposeBotton from "../ai-compose/ai-compose-botton";
+import { autoAIComplete } from "../ai-compose/ai-actions";
+import { readStreamableValue } from "ai/rsc";
 
 type Props = {
     // email subject and setter
@@ -32,10 +34,23 @@ type Props = {
 }
 
 const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, setCCValues, to, handleSend, isSending, defaultToolBarExpanded }: Props) => { 
-    // editor value
+    // editor value in HTML format (final version), need to be sent to receiver after user finished all editing
     const [value, setValue] = React.useState<string>('');
     // expand state to control the expand / hide of contact components
     const [expanded, setExpanded] = React.useState<boolean>(defaultToolBarExpanded ?? false);
+    // editor autocomplete text snippet by AI
+    const [snippet, setSnippet] = React.useState<string>('');
+
+    // auto complete email content based on current editor value
+    const autoComplete = async(value: string) => { 
+        const { output } = await autoAIComplete(value);
+
+        for await (const snippet of readStreamableValue(output)) {
+            if (snippet) { 
+                setSnippet(snippet);
+            }
+        } 
+    }
 
     // custom extension
     const CustomText = Text.extend({
@@ -43,7 +58,8 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
             return {
                 // press Cmd + j on Mac or Ctrl + j on Windows to execute
                 'Meta-j': () => {
-                    console.log("Meta-j pressed")
+                    // call autoComplete function
+                    autoComplete(this.editor.getText())
                     return true
                 }
             }
@@ -62,6 +78,11 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
             setValue(editor.getHTML())
         }
     })
+
+    // update autocomplete text snippet to editor content
+    useEffect(() => {
+        editor?.commands.insertContent(snippet);
+    }, [editor, snippet])
 
     // check editor existence
     if (!editor) { 

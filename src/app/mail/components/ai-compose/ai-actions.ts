@@ -4,7 +4,7 @@ import { streamText } from 'ai'
 import { createStreamableValue } from 'ai/rsc'
 import { google } from '@ai-sdk/google'
 
-const generateEmail = async (context: string, prompt: string) => {
+export async function generateEmail(context: string, prompt: string) {
 
     console.log('Context: ', context);
 
@@ -50,8 +50,47 @@ const generateEmail = async (context: string, prompt: string) => {
     })();
 
     return { output: stream.value };
-
 }
 
-export default generateEmail;
+export async function autoAIComplete(input: string) {
+
+    console.log('Input: ', input);
+
+    const stream = createStreamableValue('');
+
+    (async () => {
+        // use AI API KEY in .env and generate result
+        const { textStream } = await streamText({
+            model: google('gemini-2.0-flash-001'),
+            prompt: ` ALWAYS RESPOND IN PLAIN TEXT, no html or markdown.
+            You are a helpful AI embedded in a email client app that is used to autocomplete sentences, similar to google gmail autocomplete
+            The traits of AI include expert knowledge, helpfulness, cleverness, and articulateness.
+            AI is a well-behaved and well-mannered individual.
+            AI is always friendly, kind, and inspiring, and he is eager to provide vivid and thoughtful responses to the user.
+            I am writing a piece of text in a notion text editor app.
+            Help me complete my train of thought here: <input>${input}</input>
+            keep the tone of the text consistent with the rest of the text.
+            keep the response short and sweet. Act like a copilot, finish my sentence if need be, but don't try to generate a whole new paragraph.
+            Do not add fluff like "I'm here to help you" or "I'm a helpful AI" or anything like that.
+
+            Example:
+            Dear Alice, I'm sorry to hear that you are feeling down.
+
+            Output: Unfortunately, I can't help you with that.
+
+            Your output is directly concatenated to the input, so do not add any new lines or formatting, just plain text.`,
+        });
+
+        // update result into stream
+        for await (const snippet of textStream) {
+            stream.update(snippet);
+        }
+
+        // finalise stream transmission
+        stream.done();
+    })();
+
+    return { output: stream.value };
+}
+
 

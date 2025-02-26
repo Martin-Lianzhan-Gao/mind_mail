@@ -14,7 +14,7 @@ import React from "react";
 import { Button } from "~/components/ui/button";
 import { Bot } from "lucide-react";
 import { Textarea } from "~/components/ui/textarea";
-import generateEmail from "./ai-actions";
+import { generateEmail } from "./ai-actions";
 import { readStreamableValue } from "ai/rsc";
 import useThreads from "~/hooks/use-threads";
 import { turndown } from "~/lib/ turndown";
