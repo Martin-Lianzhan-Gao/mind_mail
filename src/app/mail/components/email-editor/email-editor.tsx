@@ -123,18 +123,17 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
                             onChange={(e) => setSubject(e.target.value)}
                         />
                     </>    
-                ) }
+                )}
+                {/* Click-able text to expand / hide contact components */}
+                <div className="flex items-center gap-2">
+                    <div className="cursor-pointer">
+                        <span className="text-green-600 font-medium" onClick={() => { setExpanded(!expanded) }}>Draft {" "}</span>
+                        <span>to {to.join(", ")}</span>
+                    </div>
+                    <AIComposeBotton isComposing={defaultToolBarExpanded} onGenerate={onGenerate} />
+                </div>
             </div>
 
-            {/* Click-able text to expand / hide contact components */}
-            <div className="flex items-center gap-2">
-                <div className="cursor-pointer">
-                    <span className="text-green-600 font-medium" onClick={() => { setExpanded(!expanded) }}>Draft {" "}</span>
-                    <span>to {to.join(", ")}</span>
-                </div>
-                <AIComposeBotton isComposing={defaultToolBarExpanded} onGenerate={onGenerate} />
-            </div>
-            
             <div className="prose w-full px-4">
                 <EditorContent editor={editor} value={value} />
             </div>

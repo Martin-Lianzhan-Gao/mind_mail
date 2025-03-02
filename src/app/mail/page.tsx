@@ -1,7 +1,9 @@
 'use client' // you must use client component if you want to use dynamic import
+import { UserButton } from "@clerk/nextjs";
 import dynamic from "next/dynamic";
 import React from "react";
 import ThemeToggle from "~/components/theme-toggle";
+import ComposeButton from "./components/compose-button";
 
 // import Mail from "./mail";
 
@@ -17,7 +19,11 @@ const MailDashboard = () => {
     return (
         <>
             <div className="absolute bottom-4 left-4">
-                <ThemeToggle />
+                <div className="flex items-center gap-2">
+                    <UserButton />
+                    <ThemeToggle />
+                    <ComposeButton />
+                </div>
             </div>
             <Mail defaultLayout={[20, 32, 48]} defaultCollapsed={false} navCollapseSize={4} />
         </>

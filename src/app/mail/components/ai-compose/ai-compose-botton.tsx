@@ -17,7 +17,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { generateEmail } from "./ai-actions";
 import { readStreamableValue } from "ai/rsc";
 import useThreads from "~/hooks/use-threads";
-import { turndown } from "~/lib/ turndown";
+import { turndown } from "~/lib/turndown";
 
 type Props = {
     isComposing: boolean,
@@ -66,7 +66,7 @@ const AIComposeBotton = ({ isComposing, onGenerate }: Props) => {
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button size='icon' variant={'outline'} onClick={() => setOpen(true)}>
                     <Bot className="size-5" />
                 </Button>
