@@ -7,6 +7,8 @@ import axios from "axios";
 
 // handle account token after received from Aurinko
 export const GET = async (req: NextRequest) => {
+
+    console.log("Callback received from Aurinko");
     // check user login status first
     const { userId } = await auth();
     if (!userId) { 
@@ -48,7 +50,7 @@ export const GET = async (req: NextRequest) => {
         });
     }
 
-    console.log(token);
+    console.log("Access Token", token.accessToken);
     // get account details
     const accountDetails = await getAccountDetails(token.accessToken);
 

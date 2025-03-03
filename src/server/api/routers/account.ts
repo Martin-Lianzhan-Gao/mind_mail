@@ -1,7 +1,9 @@
 import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
-import z, { late } from "zod";
+import z from "zod";
 import { db } from "~/server/db";
 import { Prisma } from "@prisma/client";
+import { emailAddressSchema } from "~/type";
+import { Account } from "~/lib/account";
 
 // based on user id and account id, find matched account (whether the user has the account or not)
 export const authoriseAccountAccess = async (accountId: string, userId: string) => { 
@@ -182,5 +184,33 @@ export const accountRouter = createTRPCRouter({
             from: { name: account.name, address: account.emailAddress },
             internetMessageId: lastExternalEmail.internetMessageId
         }
-     })
+    }),
+    sendEmail: privateProcedure.input(
+        z.object({
+            accountId: z.string(),
+            body: z.string(),
+            subject: z.string(),
+            from: emailAddressSchema,
+            to: z.array(emailAddressSchema),
+            cc: z.array(emailAddressSchema).optional(),
+            bcc: z.array(emailAddressSchema).optional(),
+            replyTo: emailAddressSchema,
+            inReplyTo: z.string().optional(),
+            threadId: z.string().optional(),
+        })
+    ).mutation(async ({ ctx, input }) => { 
+        const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId);
+        const acct = new Account(account.accessToken);
+        await acct.sendEmail({
+            from: input.from,
+            to: input.to,
+            cc: input.cc,
+            bcc: input.bcc,
+            replyTo: input.replyTo,
+            subject: input.subject,
+            body: input.body,
+            inReplyTo: input.inReplyTo,
+            threadId: input.threadId
+        })
+    })
 });

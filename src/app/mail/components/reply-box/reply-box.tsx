@@ -4,6 +4,7 @@ import { api, RouterOutputs } from "~/trpc/react";
 import EmailEditor from "../email-editor/email-editor";
 import useThreads from "~/hooks/use-threads";
 import React from "react";
+import { toast } from "sonner";
 
 
 const ReplyBox = () => {
@@ -53,8 +54,30 @@ const Component = ({ replyDetails }: { replyDetails: RouterOutputs["account"]["g
 
     }, [threadId, replyDetails])
 
+    const sendEmail = api.account.sendEmail.useMutation();
+
     const handleSend = async (value: string) => { 
-        console.log(value)
+        if (!replyDetails) { 
+            return
+        }
+        sendEmail.mutate({
+            accountId,
+            threadId: threadId ?? undefined,
+            body: value,
+            subject,
+            from: replyDetails.from,
+            to: replyDetails.to.map(to => ({ address: to.address, name: to.name ?? ""})),
+            cc: replyDetails.cc.map(cc => ({ address: cc.address, name: cc.name ?? "" })),
+            replyTo: replyDetails.from,
+            inReplyTo: replyDetails.internetMessageId
+        }, {
+            onSuccess: () => {
+                toast.success("Email sent");
+            },
+            onError: (error) => {
+                toast.error("Error sending email")
+            }
+        }) 
     }
 
 
@@ -73,7 +96,7 @@ const Component = ({ replyDetails }: { replyDetails: RouterOutputs["account"]["g
             to={replyDetails.to.map(to => to.address)}
 
             // for send email button
-            isSending={false}
+            isSending={sendEmail.isPending}
             handleSend={handleSend}
 
             defaultToolBarExpanded={ false }

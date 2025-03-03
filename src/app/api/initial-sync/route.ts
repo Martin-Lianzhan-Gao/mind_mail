@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Accout } from "~/lib/account";
+import { Account } from "~/lib/account";
 import { db } from "~/server/db";
 import { syncEmailsToDatabase } from "~/lib/sync-to-db";
 
@@ -31,7 +31,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     // start sync
-    const account = new Accout(dbAccount.accessToken);
+    const account = new Account(dbAccount.accessToken);
     // perform initial sync to receive emails
     const response = await account.performInitialSync();
     // check response

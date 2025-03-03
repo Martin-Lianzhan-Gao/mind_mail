@@ -44,6 +44,7 @@ const config = {
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-floating-promises': 'warn',
         '@typescript-eslint/await-thenable': 'warn',
+        '@typescript-eslint/no-unsafe-return': 'warn',
   }
 }
 module.exports = config;

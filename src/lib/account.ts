@@ -1,7 +1,7 @@
 import axios from "axios";
-import { SyncResponse, SyncUpdatedEmailsReponse, EmailMessage } from "~/type";
+import { SyncResponse, SyncUpdatedEmailsReponse, EmailMessage, EmailAddress } from "~/type";
 
-export class Accout {
+export class Account {
     // the token represents the email account
     private token: string;
     
@@ -105,6 +105,62 @@ export class Accout {
             } else { // other error
                 console.error("Error during initial sync", error);
             }
+        }
+    }
+
+    // send email
+    async sendEmail({ 
+        from, // sender
+        to, // recipents
+        cc, 
+        bcc,
+        replyTo, // eamil address that 
+        subject,
+        body,
+        inReplyTo, // internet message id
+        references, 
+        threadId
+    }: { 
+        from: EmailAddress,
+        to: EmailAddress[],
+        cc?: EmailAddress[],
+        bcc?: EmailAddress[],
+        replyTo?: EmailAddress
+        subject: string,
+        body: string,
+        inReplyTo?: string, 
+        references?: string,
+        threadId?: string
+    }) { 
+        try {
+            const response = await axios.post("https://api.aurinko.io/v1/email/messages", {
+                from,
+                to,
+                cc,
+                bcc,
+                replyTo: [replyTo], // actually we only support one replyTo list
+                subject,
+                body,
+                inReplyTo,
+                references,
+                threadId
+            }, {
+                params: {
+                    returnIds: true
+                },
+                headers: {
+                    Authorization: `Bearer ${this.token}`
+                }
+            });
+            console.log("Eamil sent:", response.data);
+            return response.data;
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error("Error sending email", JSON.stringify(error.response?.data));
+            } else { 
+                console.error("Error sending email", error); 
+            }
+            throw error;
         }
     }
 }
