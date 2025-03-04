@@ -12,7 +12,7 @@ import {
 
 import React from "react";
 import { Button } from "~/components/ui/button";
-import { Bot } from "lucide-react";
+import { Bot } from "lucide-react";  
 import { Textarea } from "~/components/ui/textarea";
 import { generateEmail } from "./ai-actions";
 import { readStreamableValue } from "ai/rsc";
