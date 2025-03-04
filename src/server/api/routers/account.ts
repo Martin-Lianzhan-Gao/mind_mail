@@ -70,6 +70,7 @@ export const accountRouter = createTRPCRouter({
             }
         })
     }),
+
     // get threads list by category (inbox, sent, draft, etc..) and status (done or not)
     getThreads: privateProcedure.input(z.object({
         accountId: z.string(),
@@ -77,6 +78,10 @@ export const accountRouter = createTRPCRouter({
         done: z.boolean() // thread status
     })).query(async ({ input, ctx }) => { 
         const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId);
+
+        // everytime get threads, update emails
+        const acc = new Account(account.accessToken);
+        acc.syncEmails().catch(console.error);
 
         // filter by the currently selected tab category for Thread model
         const filter: Prisma.ThreadWhereInput = {}

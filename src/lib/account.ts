@@ -1,5 +1,7 @@
 import axios from "axios";
-import { SyncResponse, SyncUpdatedEmailsReponse, EmailMessage, EmailAddress } from "~/type";
+import { db } from "~/server/db";
+import { SyncResponse, SyncUpdatedEmailsReponse, EmailMessage, EmailAddress, emailAddressSchema } from "~/type";
+import { syncEmailsToDatabase } from "./sync-to-db";
 
 export class Account {
     // the token represents the email account
@@ -161,6 +163,60 @@ export class Account {
                 console.error("Error sending email", error); 
             }
             throw error;
+        }
+    }
+
+    async syncEmails() { 
+        const account = await db.account.findUnique({
+            where: {
+                accessToken: this.token
+            }
+        });
+        // check account and latest delta token
+        if (!account) { 
+            throw new Error("Account not found");
+        }
+        if (!account.latestDeltaToken) { 
+            throw new Error("Account not ready for sync");
+        }
+        // request for updated emails by latest delta token
+        let response = await this.getUpdatedEmails({ deltaToken: account.latestDeltaToken });
+        let storedDeltaToken = account.latestDeltaToken;
+        // get all updated emails
+        let allEmails: EmailMessage[] = response.records;
+        // hold temporary latest delta token
+        if (response.nextDeltaToken) { 
+            storedDeltaToken = response.nextDeltaToken;
+        }
+        // update emails until no page (up to date)
+        while (response.nextPageToken) { 
+            response = await this.getUpdatedEmails({ pageToken: response.nextPageToken });
+            // continously update delta token until the latest one
+            if (response.nextDeltaToken) { 
+                storedDeltaToken = response.nextDeltaToken;
+            }
+            allEmails = allEmails.concat(response.records);
+        }
+        // sync all updated emails to database
+        try {
+            syncEmailsToDatabase(allEmails, account.id);
+        } catch (error) {
+            console.error("Error syncing emails", error);
+        }
+
+        // update latest delta token to account table
+        await db.account.update({
+            where: {
+                id: account.id
+            },
+            data: {
+                latestDeltaToken: storedDeltaToken
+            }
+        })
+
+        return {
+            emails: allEmails,
+            latestDeltaToken: storedDeltaToken
         }
     }
 }
