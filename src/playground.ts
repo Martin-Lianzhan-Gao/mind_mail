@@ -1,10 +1,11 @@
-// for TESTING purposes ONLY
 
-import { Account } from "./lib/account";
+import { searchEmails } from "./lib/search";
 
-// copied from db
-const accessToken = "eXiQ_E2KFlSVxDfdJL8QeaScHOee_M0MkdKCXA9O07o"
+const searchResults = await searchEmails("93500", "test")
 
-const account = new Account(accessToken);
+console.log(searchResults.length);
 
-await account.syncEmails(); // sync emails to database
+for (const email of searchResults) { 
+    console.log(email.subject)
+}
+

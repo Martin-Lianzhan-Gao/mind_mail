@@ -3,23 +3,45 @@ import pLimit from "p-limit";
 import { db } from "~/server/db";
 import { Prisma } from "@prisma/client";
 
+
 export const syncEmailsToDatabase = async (emails: EmailMessage[], accountId: string) => { 
     console.log("Syncing emails to database...", emails.length);
     // sync 10 emails each time in parallel (async action)
     const limit = pLimit(10);
+
     // upsert all emails to database
     try {
-        for (const [index, email] of emails.entries()) {
-            await upsertEmail(email, accountId, index);
+        for (const email of emails) {
+            // // sync email to orama
+            // await orama.insert({
+            //     subject: email.subject,
+            //     body: email.body ?? "",
+        
+            //     from: email.from.address,
+            //     to: email.to.map(to => to.address),
+    
+            //     sentAt: email.sentAt.toLocaleString(),
+            //     threadId: email.threadId
+            // })
+            // sync email to database
+            await upsertEmail(email, accountId, 0);
         }
     } catch (error) {
-        console.error('Oops, something went wrong', error);
+        throw new Error(`Failed to sync emails to database: ${error}`);
     }
 }
 
+
+/**
+ * Upsert an email into database.
+ * 
+ * @param {EmailMessage} email The email to be upserted into database.
+ * @param {string} accountId The id of the account that owns this email.
+ * @param {number} index The index number of the email in the array of emails to be upserted to database.
+ */
 const upsertEmail = async (email: EmailMessage, accountId: string, index: number) => {
 
-    console.log(`Upserting email ${index} to database...`);
+    console.log(`Upserting a email to your database...`);
 
     try {
         // by default, set email label type to inbox

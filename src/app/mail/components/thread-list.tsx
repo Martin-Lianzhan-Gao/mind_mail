@@ -12,6 +12,7 @@ const ThreadList = () => {
 
     // group threads by date, acc refers to the accumulator
     const groupThreads = threads?.reduce((acc, currThread) => {
+        console.log("threads length is:", threads.length)
         // get latest date of email of current thread, if no, use current date
         const date = format(currThread.emails[0]?.sentAt ?? new Date(), "dd-MM-yyyy"); 
 

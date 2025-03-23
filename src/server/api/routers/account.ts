@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { Prisma } from "@prisma/client";
 import { emailAddressSchema } from "~/type";
 import { Account } from "~/lib/account";
+import { searchEmails } from "~/lib/search";
 
 // based on user id and account id, find matched account (whether the user has the account or not)
 export const authoriseAccountAccess = async (accountId: string, userId: string) => { 
@@ -217,5 +218,14 @@ export const accountRouter = createTRPCRouter({
             inReplyTo: input.inReplyTo,
             threadId: input.threadId
         })
+    }),
+    getSearchResults: privateProcedure.input(z.object({
+        accountId: z.string(),
+        query: z.string()
+    })).mutation(async ({ ctx, input }) => { 
+        const account = await authoriseAccountAccess(input.accountId, ctx.auth.userId);
+        const searchResults = await searchEmails(account.id, input.query);
+        console.log(searchResults.length);
+        return searchResults;
     })
 });

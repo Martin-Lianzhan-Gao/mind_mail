@@ -10,6 +10,7 @@ import AccountSwitcher from "./components/account-switcher";
 import Sidebar from "./components/sidebar";
 import ThreadList from "./components/thread-list";
 import ThreadDisplay from "./components/thread-display";
+import SearchBar from "./components/email-search/search-bar";
 
 // define props structure
 type Props = {
@@ -57,15 +58,11 @@ const Mail = ({ defaultLayout = [20, 32, 48], navCollapseSize, defaultCollapsed 
                         {/* Email Category Side Bar */}
                         <Sidebar isCollapsed={isCollapsed} />
                         <div className="flex-1"></div>
-                        {/* Main Content */}
-                        ASK AI
+                        {/* AI RAG */}
                     </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />
-                <ResizablePanel
-                    defaultSize={defaultLayout[1]}
-                    minSize={30}
-                >
+                <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
                     <Tabs defaultValue="Inbox"> 
                         <div className="flex items-center px-4 py-2">
                             <h1 className="text-xl font-bold">Inbox</h1>
@@ -80,7 +77,7 @@ const Mail = ({ defaultLayout = [20, 32, 48], navCollapseSize, defaultCollapsed 
                         </div>
                         <Separator />
                         {/* Search Bar */}
-                        Search Bar
+                        <SearchBar />
                         <TabsContent value="Inbox">
                             <ThreadList></ThreadList>
                         </TabsContent>
