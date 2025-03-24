@@ -20,7 +20,7 @@ const EmailDisplay = ({ email }: Props) => {
 
     return (
         
-        <div className={cn('border rounded-md p-4 cursor-pointer transition-all  hover:translate-x-2', {
+        <div className={cn('border rounded-md p-4 cursor-pointer transition-all hover:translate-x-2 dark:bg-gray-800', {
             'border-l-gray-900 border-l-4': isMe
         })}>
             <div className="flex items-center justify-between gap-2">
@@ -37,7 +37,7 @@ const EmailDisplay = ({ email }: Props) => {
                 </p>
             </div>
             <div className="h-4"></div>
-            <Letter html={email?.body ?? ""} className='bg-white rounded-md' />
+            <Letter html={email?.body ?? ""} className='bg-white rounded-md text-black dark:bg-gray-800 dark:text-white' />
         </div>
     )
 }

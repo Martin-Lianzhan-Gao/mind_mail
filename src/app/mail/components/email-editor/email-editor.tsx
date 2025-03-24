@@ -105,7 +105,7 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
                 {expanded && (
                     <>
                         <TagInput
-                            label="To"
+                            label="TO"
                             onChange={setToValues}
                             placeholder="Add recipent(s)"
                             value={toValues}

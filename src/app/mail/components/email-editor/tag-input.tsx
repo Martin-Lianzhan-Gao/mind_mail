@@ -62,10 +62,17 @@ const TagInput = ({ placeholder, label, onChange, value }: Props) => {
                 }
                 // detailed style settings
                 classNames={{
-                    control: () => classNames('!border-none !outline-none !ring-0 !shadow-none focus:border-none focus:outline-none focus:ring-0 focus:shadow-none dark:bg-transparent'),
-                    // selected 
-                    multiValue: () => classNames('dark:!bg-gray-700'),
-                    option: () => classNames('dark:bg-gray-700')
+                    control: () => { return '!border-none !outline-none !ring-0 !shadow-none focus:border-none focus:outline-none focus:ring-0 focus:shadow-none dark:bg-transparent' },
+                    // selected value container
+                    multiValue: () => { return 'dark:!bg-gray-700' },
+                    // selected value content area
+                    multiValueLabel: () => { return 'dark:bg-gray-700 dark:text-white rounded-md' },
+                    // drop-down menu
+                    menu: () => { return 'dark:bg-gray-700' },
+                    // drop-down options
+                    option: () => { return 'dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600' },
+                    // input style
+                    input: () => { return 'dark:text-gray-300' }
                 }}
                 classNamePrefix="react-select"
             />

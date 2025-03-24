@@ -14,7 +14,7 @@ import KBar from "~/app/mail/components/kbar";
 export const metadata: Metadata = {
   title: "Mind Mail",
   description: "AI Driven Email Client",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/logo.png" }],
 };
 
 export default function RootLayout({
