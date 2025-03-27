@@ -17,7 +17,7 @@ export default function Page() {
 
     return (
         <div className='absolute h-screen w-screen inset-0 flex items-center justify-center'>
-            <img className='h-full w-full object-cover' src='/background.jpg'></img>
+            <img className='h-full w-full object-cover' src='/images/background.jpg'></img>
             <div className={cn('absolute w-fit h-fit', isHovering ? "animate-none" : "animate-breath-float")} 
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
