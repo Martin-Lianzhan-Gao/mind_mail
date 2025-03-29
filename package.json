@@ -46,7 +46,7 @@
     "@types/turndown": "^5.0.5",
     "@vercel/functions": "^1.5.2",
     "ai": "^4.1.50",
-    "axios": "^1.7.9",
+    "axios": "^1.8.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "data-fns": "^1.1.0",
@@ -88,13 +88,13 @@
     "@typescript-eslint/parser": "^8.1.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^15.0.1",
+    "next": "^15.2.3",
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "prisma": "^5.14.0",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5.5.3",
-    "next": "^15.2.3"
+    "typescript": "^5.5.3"
   },
   "ct3aMetadata": {
     "initVersion": "7.38.1"
