@@ -11,6 +11,7 @@ import { Input } from "~/components/ui/input";
 import AIComposeBotton from "../ai-compose/ai-compose-botton";
 import { autoAIComplete } from "../ai-compose/ai-actions";
 import { readStreamableValue } from "ai/rsc";
+import { set } from "date-fns";
 
 type Props = {
     // email subject and setter

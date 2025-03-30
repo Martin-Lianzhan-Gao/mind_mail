@@ -135,6 +135,7 @@ export class Account {
         threadId?: string
     }) { 
         try {
+            // console.log("Carbon copy:", cc)
             const response = await axios.post("https://api.aurinko.io/v1/email/messages", {
                 from,
                 to,

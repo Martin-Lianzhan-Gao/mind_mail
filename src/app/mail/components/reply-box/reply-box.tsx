@@ -60,14 +60,17 @@ const Component = ({ replyDetails }: { replyDetails: RouterOutputs["account"]["g
         if (!replyDetails) { 
             return
         }
+
+        console.log("Carbon copy:", ccValues);
+        console.log("CC from reply details:", replyDetails.to.map(to => ({ address: to.address, name: to.name ?? to.address })));
         sendEmail.mutate({
             accountId,
             threadId: threadId ?? undefined,
             body: value,
             subject,
             from: replyDetails.from,
-            to: replyDetails.to.map(to => ({ address: to.address, name: to.name ?? ""})),
-            cc: replyDetails.cc.map(cc => ({ address: cc.address, name: cc.name ?? "" })),
+            to: replyDetails.to.map(to => ({ address: to.address, name: to.name ?? to.address})).concat(toValues.map(to => ({ address: to.value, name: to.value }))),
+            cc: replyDetails.cc.map(cc => ({ address: cc.address, name: cc.name ?? cc.address })).concat(ccValues.map(cc => ({ address: cc.value, name: cc.value }))),
             replyTo: replyDetails.from,
             inReplyTo: replyDetails.internetMessageId
         }, {
@@ -87,10 +90,10 @@ const Component = ({ replyDetails }: { replyDetails: RouterOutputs["account"]["g
             setSubject={setSubject}
 
             toValues={toValues}
-            setToValues={setToValues}
+            setToValues={(values) => setToValues(values)}
 
             ccValues={ccValues}
-            setCCValues={setCcValues}
+            setCCValues={(values) => setCcValues(values)}
 
             // get addresses used to show them on editor
             to={replyDetails.to.map(to => to.address)}
