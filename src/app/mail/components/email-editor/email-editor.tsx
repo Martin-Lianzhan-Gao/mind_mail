@@ -135,7 +135,7 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
                 </div>
             </div>
 
-            <div className="prose w-full px-4">
+            <div className="w-full px-4 mb-4 mt-2 h-20">
                 <EditorContent editor={editor} value={value} />
             </div>
             <Separator />
