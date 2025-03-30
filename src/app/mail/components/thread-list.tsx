@@ -14,7 +14,7 @@ const ThreadList = () => {
     const groupThreads = threads?.reduce((acc, currThread) => {
         console.log("threads length is:", threads.length)
         // get latest date of email of current thread, if no, use current date
-        const date = format(currThread.emails[0]?.sentAt ?? new Date(), "dd-MM-yyyy"); 
+        const date = format(currThread.lastMessageDate ?? new Date(), "dd-MM-yyyy"); 
 
         // if the original value of acc doesn't has the date as key, create with empty array value,
         // if exists, just skip

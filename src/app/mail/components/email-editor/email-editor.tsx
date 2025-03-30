@@ -102,7 +102,7 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
             </div>
             { /* Contact Components */}
             { /* CC Component */}
-            <div className="p-4 pb-0 space-y-2 shadow">
+            <div className="p-4 pb-0 space-y-2 shadow-sm">
                 {expanded && (
                     <>
                         <TagInput
