@@ -102,7 +102,7 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
             </div>
             { /* Contact Components */}
             { /* CC Component */}
-            <div className="p-4 pb-0 space-y-2">
+            <div className="p-4 pb-0 space-y-2 shadow">
                 {expanded && (
                     <>
                         <TagInput
@@ -126,7 +126,7 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
                     </>    
                 )}
                 {/* Click-able text to expand / hide contact components */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 pb-4">
                     <div className="cursor-pointer">
                         <span className="text-green-600 font-medium" onClick={() => { setExpanded(!expanded) }}>Draft {" "}</span>
                         <span>to {to.join(", ")}</span>
@@ -134,9 +134,8 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
                     <AIComposeBotton isComposing={defaultToolBarExpanded} onGenerate={onGenerate} />
                 </div>
             </div>
-
-            <div className="w-full px-4 mb-4 mt-2 h-20">
-                <EditorContent editor={editor} value={value} />
+            <div className="w-full px-4 mt-2">
+                <EditorContent editor={editor} value={value} className="h-[220px] overflow-auto" />
             </div>
             <Separator />
             { /* AI auto complete Hint */}

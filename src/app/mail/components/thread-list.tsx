@@ -30,7 +30,7 @@ const ThreadList = () => {
     }, {} as Record<string, typeof threads>) // define data type of acc
 
     return (
-        <div className="max-w-full overflow-y-scroll max-h-[calc(100vh-140px)]">
+        <div className="max-w-full overflow-y-auto max-h-[calc(100vh-140px)]">
             <div className="flex flex-col gap-2 p-4 pt-0">
                 {   // transfer an object into array, then map each record
                     Object.entries(groupThreads ?? {}).map(([date, threads]) => { 
