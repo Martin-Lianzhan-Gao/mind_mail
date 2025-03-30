@@ -19,7 +19,7 @@ const MailDashboard = () => {
     return (
         <>
             <div className="absolute bottom-4 left-4">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 z-10">
                     <UserButton />
                     <ThemeToggle />
                     <ComposeButton />

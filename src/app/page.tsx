@@ -1,6 +1,15 @@
 import LinkAccountButton from "~/components/ui/link-account-button";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
+
+    const user = await auth();
+
+    if (user.userId) {
+        redirect("/mail");
+    }
+
     return (
         <div className="h-screen w-screen bg-[#E7E4DF] text-black flex flex-col items-center justify-center space-y-40 dark:bg-[#545454] dark:text-[#E7E4DF] animate-rise">
             <div className="flex space-x-20 w-fit h-fit max-w-[1400px] justify-items-start animate-rise">
