@@ -120,7 +120,7 @@ export const accountRouter = createTRPCRouter({
                 }
             },
             // only get latest 15 threads
-            take: 15,
+            take: 50,
             orderBy: {
                 // threads in descending order
                 lastMessageDate: "desc"
