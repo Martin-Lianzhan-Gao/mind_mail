@@ -135,7 +135,7 @@ const EmailEditor = ({ subject, setSubject, toValues, setToValues, ccValues, set
                 </div>
             </div>
             <div className="w-full px-4 mt-2">
-                <EditorContent editor={editor} value={value} className="h-[220px] overflow-auto" />
+                <EditorContent editor={editor} value={value} className="h-[180px] overflow-auto" />
             </div>
             <Separator />
             { /* AI auto complete Hint */}
