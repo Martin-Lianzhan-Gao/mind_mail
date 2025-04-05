@@ -173,11 +173,24 @@ export const accountRouter = createTRPCRouter({
             throw new Error('Thread not found!')
         }
         
-        // defind the last email of the thread that the account has received (not send by the account)
+        // defind the last email of the thread that the send from the external email address (to define the reply details)
         const lastExternalEmail = thread.emails.reverse().find(email => email.from.address !== account.emailAddress);
-
-        if (!lastExternalEmail) { 
-            throw new Error('No external email found!')
+        // if there is no external email, means there is only emails from the account
+        if (!lastExternalEmail) {
+            console.log('No external email found!');
+            const lastEmail = thread.emails[thread.emails.length - 1];
+            if (!lastEmail) {
+                throw new Error('No email found in the thread!');
+            }
+            // if there is no external email, means there is only emails from the account
+            return {
+                subject: lastEmail.subject,
+                to: lastEmail.to,
+                cc: lastEmail.cc,
+                from: { name: account.name, address: account.emailAddress },
+                reply: false,
+                internetMessageId: lastEmail?.internetMessageId
+            }
         }
 
         // return data
@@ -188,6 +201,7 @@ export const accountRouter = createTRPCRouter({
             // carbon copy
             cc: lastExternalEmail.cc.filter(email => email.address !== account.emailAddress), 
             from: { name: account.name, address: account.emailAddress },
+            reply: true,
             internetMessageId: lastExternalEmail.internetMessageId
         }
     }),

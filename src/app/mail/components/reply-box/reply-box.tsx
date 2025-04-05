@@ -6,7 +6,6 @@ import useThreads from "~/hooks/use-threads";
 import React from "react";
 import { toast } from "sonner";
 
-
 const ReplyBox = () => {
 
     const { threadId, accountId } = useThreads();
@@ -29,7 +28,13 @@ const Component = ({ replyDetails }: { replyDetails: RouterOutputs["account"]["g
     const { threadId, accountId } = useThreads();
 
     // if subject not starts with 'Re', manually add it
-    const [subject, setSubject] = React.useState(replyDetails.subject.startsWith('Re:') ? replyDetails.subject : `Re: ${replyDetails.subject}`);
+    const [subject, setSubject] = React.useState(() => { 
+        if (replyDetails.reply) {
+            return replyDetails.subject?.startsWith('Re:') ? replyDetails.subject : `Re: ${replyDetails.subject}`
+        } else {
+            return replyDetails.subject
+        }
+    });
 
     // construct toValues
     const [toValues, setToValues] = React.useState<{ label: string, value: string }[]>(replyDetails.to.map(to => ({ label: to.address ?? to.name, value: to.address })) || [])
@@ -43,12 +48,14 @@ const Component = ({ replyDetails }: { replyDetails: RouterOutputs["account"]["g
         if (!threadId || !replyDetails) { 
             return 
         }
-    
-        // Re-construct new data structure
-        if (!replyDetails.subject.startsWith('Re:')) {
-            setSubject(`Re: ${replyDetails.subject}`)
+        
+        if (replyDetails.reply) { 
+            // Re-construct new data structure
+            if (!replyDetails.subject?.startsWith('Re:')) {
+                setSubject(`Re: ${replyDetails.subject}`)
+            }
         }
-
+        
         setToValues(replyDetails.to.map(to => ({ label: to.address ?? to.name, value: to.address })))
         setCcValues(replyDetails.cc.map(cc => ({ label: cc.address ?? cc.name, value: cc.address })))
 
