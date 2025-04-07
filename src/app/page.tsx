@@ -1,13 +1,26 @@
 import LinkAccountButton from "~/components/ui/link-account-button";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { db } from "~/server/db";
 
 export default async function Home() {
 
     const user = await auth();
 
     if (user.userId) {
-        redirect("/mail");
+        // If there is no email account linked, redirect to the link account page
+        const num = await db.account.count({
+            where: {
+                userId: user.userId,
+            }
+        });
+
+        console.log("Current account num:", num);
+
+        if (num > 0) {
+            // If there is an email account linked, redirect to the mail page
+            redirect("/mail");
+        }
     }
 
     return (
