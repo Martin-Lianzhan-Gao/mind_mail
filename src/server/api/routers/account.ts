@@ -30,6 +30,22 @@ export const authoriseAccountAccess = async (accountId: string, userId: string) 
     return account;
 }
 
+const inboxFilter = (accountId: string): Prisma.ThreadWhereInput => ({
+    accountId,
+    inboxStatus: true
+})
+
+const sentFilter = (accountId: string): Prisma.ThreadWhereInput => ({
+    accountId,
+    sentStatus: true
+})
+
+const draftFilter = (accountId: string): Prisma.ThreadWhereInput => ({
+    accountId,
+    draftStatus: true
+})
+
+
 export const accountRouter = createTRPCRouter({
 
     getAccounts: privateProcedure.query(async ({ ctx }) => { 
@@ -85,14 +101,14 @@ export const accountRouter = createTRPCRouter({
         acc.syncEmails().catch(console.error);
 
         // filter by the currently selected tab category for Thread model
-        const filter: Prisma.ThreadWhereInput = {}
+        let filter: Prisma.ThreadWhereInput = {}
 
         if (input.tabCategory === "inbox") {
-            filter.inboxStatus = true;
+            filter = inboxFilter(account.id);
         } else if (input.tabCategory === "sent") {
-            filter.sentStatus = true;
+            filter = sentFilter(account.id);
         } else if (input.tabCategory === "draft") {
-            filter.draftStatus = true;
+            filter = draftFilter(account.id);
         }
 
         filter.done = {

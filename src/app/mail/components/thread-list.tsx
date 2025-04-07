@@ -82,7 +82,6 @@ const ThreadList = () => {
                             }
                         </React.Fragment>
                     })
-                
                 }
             </div>   
         </div>

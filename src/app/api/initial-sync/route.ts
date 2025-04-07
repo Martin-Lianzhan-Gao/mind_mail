@@ -47,14 +47,14 @@ export const POST = async (req: NextRequest) => {
     // store latest delta token to account table
     await db.account.update({
         where: {
-            id: accountId,
+            accessToken: dbAccount.accessToken
         },
         data: {
             latestDeltaToken: latestDeltaToken
         }
     });
 
-    console.log("Latest Token has been stored to account, email upsert process start...");
+    console.log("Email upserting process start with latest delta token:", latestDeltaToken);
 
     // upsert emails into database
     await syncEmailsToDatabase(emails, accountId as string);

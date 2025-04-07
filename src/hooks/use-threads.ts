@@ -23,10 +23,12 @@ const useThreads = () => {
         // if accountId and tabCategory is not null, execute query
         enabled: !!accountId && !!tabCategory,
         // set placeholder data displaying while query is loading in UI
-        placeholderData: previousData => previousData,
+        // placeholderData: previousData => previousData,
         // set auto-refetch interval，therefore, after update any information, the UI will be updated every 5 seconds
         refetchInterval: 5000
     })
+    
+    console.log("Got Threads length is:", threads?.length);
 
     return {
         // threads of current account
