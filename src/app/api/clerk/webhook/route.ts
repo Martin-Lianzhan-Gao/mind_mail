@@ -7,8 +7,8 @@ export const POST = async (req: NextRequest) => {
 
     const id = data.data.id;
     const emailAddress = data.data.email_addresses[0].email_address;
-    const firstName = data.data.first_name;
-    const lastName = data.data.last_name;
+    const firstName = data.data.first_name ?? data.data.email_addresses[0].email_address;
+    const lastName = data.data.last_name ?? "";
     const imageUrl = data.data.image_url;
 
     await db.user.upsert({
